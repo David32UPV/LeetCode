@@ -33,26 +33,31 @@ class Solution:
         for char in s:
             array_char.append(char)
 
-        elemento_repetido = 0
+        elemento_repetido = False
+        indice_elemento_repetido = 0
         longitud_sliced_window = []
 
         # Al final me tengo que guardar el maximo de 2 subarrays
-        for i in range(elemento_repetido, len(array_char)):
-            for j in range(i, len(array_char)):
-                if array_char[j] is not array_char[i]:
-                    sliced_window.append(array_char[j])
-                else:
-                    elemento_repetido = array_char.index(array_char[j])
-                    longitud_sliced_window.append(len(sliced_window))
-                    # Tienes que eliminar cuando se repite algun caracter
-                    sliced_window.clear()
+        for i in range(indice_elemento_repetido, len(array_char)):
+            if array_char[i] not in sliced_window:
+                sliced_window.append(array_char[i])
+                elemento_repetido = False
+            else:   
+                elemento_repetido = True
+                sliced_window.append(array_char[i])
+                indice_elemento_repetido = len(sliced_window) -1 - sliced_window[::-1].index(array_char[i])
+                longitud_sliced_window.append(len(sliced_window))
+                del sliced_window[:indice_elemento_repetido-1]
 
-        return max(longitud_sliced_window)
-
+        if elemento_repetido == True:
+            return max(longitud_sliced_window)
+        else:
+            return len(sliced_window)
+        
 # Solo se ejecuta lo que hay debajo de este if en este programa y NO en otro programa que importe este programa
 if __name__ == "__main__":
     solucion = Solution()
-    input_string = "abcabcbb"
+    input_string = "bbbbb"
     string_resultado = solucion.lengthOfLongestSubstring(input_string)
 
     print(string_resultado)
